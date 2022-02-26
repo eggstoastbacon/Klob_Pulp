@@ -212,12 +212,10 @@ function event_say(e)
         return
         end      
     end
-    --client:CalcSlotFromMaterial(tostring(row.name));
-    --client:DeleteItemInInventory(FindFirstSlot(tonumber(row.id)), 1);
+
     con:execute([[INSERT INTO item_auction (Account_ID, Char_ID, Char_Name, Item_Name, Item_ID, Price, Aug_Num) VALUES (']]..client:AccountID().."','"..e.other:CharacterID().."','"..e.other:GetName().."','"..item_name_dbfriend.."','"..row.id.."','"..commit_instruct[3].."','"..tostring(row.augtype).."')");
     local listing_id = con:execute("SELECT id FROM item_auction WHERE Item_ID = "..tostring(row.id).." AND Price = "..tostring(commit_instruct[3]).." AND Char_ID = "..tostring(e.other:CharacterID()).." AND Active = 1 AND Paid_Out = 0 AND Expired = 0 LIMIT 1;");
     local listing_id2 = listing_id:fetch();
-
 
     local query = ("SELECT ID,Date_Listed,Char_Name,Item_Name,Item_ID,Price,Sold_To FROM item_auction WHERE Paid_Out = 1 AND Item_Name like '"..tostring(item_name_dbfriend).."'");
     cur2 = assert (con:execute(tostring(query)));
@@ -233,8 +231,7 @@ function event_say(e)
         i = i + 1;
         hist_avg_calc = hist_avg_calc + tonumber(row2.Price);
         end
-    --end
-      -- reusing the table of results
+            
       row2 = cur2:fetch (row2, "a");
     end
     if hist_avg_calc >= 1 then
@@ -281,25 +278,11 @@ function event_say(e)
       --con:close();
       end
   
-      --local item_info = con:execute("SELECT name,id,nodrop,norent,notransfer,maxcharges,slots,attuneable,loregroup FROM items WHERE name like '%"..item_name_dbfriend.."%'");
-      --local row = item_info:fetch ({}, "a");
-      --local past_count = eq.count_item(tonumber(row.id));
-      --e.other:Message(3,"Code: " ..row.id.. ", " ..row.nodrop..", " ..row.norent..", " ..row.notransfer..", " ..row.maxcharges..", " ..row.slots..", "..eq.count_item(tonumber(row.id))..", "..row.attuneable.. ", " ..listing_count2);
       if (tonumber(listing_count2) <= 19 and tonumber(item_price) ~= nil and string.len(item_name) <= 36) then
           -- and eq.count_item(tonumber(row.id)) == 1
       local sellable = 1;
       e.other:Message(8, "Posting as direct only, ["..item_name.."] for "..tostring(item_price).. " platinum.");
-      --e.other:NukeItem(tonumber(row.id));
-      
-      --eq.remove_item(tonumber(row.id), 1);
-  
-      --client:CalcSlotFromMaterial(tostring(row.name));
-      --client:DeleteItemInInventory(FindFirstSlot(tonumber(row.id)), 1);
       con:execute([[INSERT INTO item_auction (Account_ID, Char_ID, Char_Name, Item_Name, Price, Sale_Type) VALUES (']]..client:AccountID().."','"..e.other:CharacterID().."','"..e.other:GetName().."','"..item_name_dbfriend.."','"..tostring(item_price).."','Direct')");
-      --con:execute([[INSERT INTO ixi_msgboard(Player_Name, Message, Status, Type) VALUES (']]..sender.."','"..msg.."','Live','Public')")
-  --    if(eq.count_item(tonumber(row.id)) >= 2) then
-  --        e.other:Message(14, "You have more than one of these in your inventory or bank. Currently I cannot sell items for which you have more than 1, but don't worry I will have that fixed soon.")
-   --   end
       else
         e.other:Message(8, "Please limit your item name or decription to 36 characters or less.")
       end
@@ -401,9 +384,6 @@ function event_say(e)
               e.other:Message(8, "Use /say history+item_name or history+item_link example: history+manastone");
               return
              end
-              --if(history_instruct == "augmentation" or history_instruct == "Augmentation") then
-                --stuff
-              --else
               local query = ("SELECT ID,Date_Listed,Char_Name,Item_Name,Item_ID,Price,Sold_To FROM item_auction WHERE Paid_Out = 1 AND Item_Name like '%"..tostring(item_name_dbfriend).."%'");
               cur = assert (con:execute(tostring(query)));
               --cur = assert (con:execute"SELECT ID,Date_Listed,Char_Name,Item_Name,Item_ID,Price,Sold_To FROM item_auction WHERE Paid_Out = 1 AND Item_Name like '%"..tostring(history_instruct[2]).."%'");
@@ -418,8 +398,7 @@ function event_say(e)
                local i = 1;
                 e.other:Message(6, string.format("Sold by %s to %s, On: %s - " ..eq.item_link(tonumber(row.Item_ID)).."{%s plat}", row.Char_Name, row.Sold_To, prettydateListed[1], tostring(row.Price)));
                   end
-              --end
-                -- reusing the table of results
+
                 row = cur:fetch (row, "a");
               end
                   e.other:Message(8, "+----------+End of Results+--------------------------------------------+[".. eq.say_link("hail",false,"main menu") .."]+----------+");
@@ -710,8 +689,6 @@ function event_say(e)
                   while row do
                     prettydateListed = split(row.Date_Listed, " ");
                   
-                    --print(string.format("ID: %s, Date: %s", row.ID, row.DATE))
-                    --if string.match(row.Item_Name, search_instruct[2]) then
                   local i = 1;
                   if(row.Sale_Type == "Direct") then
                     e.other:Message(6, string.format("[".. eq.say_link("Contact+"..tostring(row.ID),false,"Contact Seller").."]{%s}{%s}" ..tostring(row.Item_Name).."{%s plat}", row.Char_Name, prettydateListed[1], tostring(row.Price)));
