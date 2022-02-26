@@ -1100,10 +1100,6 @@ end
         end   
         con:close();    
     end
-
-    
-
-
     con:close();
     return
 end
