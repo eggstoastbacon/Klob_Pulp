@@ -2,6 +2,7 @@ require("mysql")
 driver = require("luasql.mysql");
 env = driver.mysql();
 con = assert (env:connect(db,username,password,server))
+gm_name = "Ixiboru"
 
 local account_max_items = 30;
 local char_max_items = 30;
@@ -206,7 +207,7 @@ function event_say(e)
         else
         e.other:Message(6, "An error occurred and I am unable to post your item. This sometimes occurs if there is 2 or more items in the database with the exact same name and I was unable to determine which item you have to sell. I will email the administrator");
         con:close();
-        eq.send_mail("Ixiboru", tostring(e.other:GetName()), "["..tostring(e.other:GetName()).."] Auction error.",item_name_dbfriend.." attempted to list but the item was not deleted.");
+        eq.send_mail(gm_name, tostring(e.other:GetName()), "["..tostring(e.other:GetName()).."] Auction error.",item_name_dbfriend.." attempted to list but the item was not deleted.");
         con:close();
         return
         end      
