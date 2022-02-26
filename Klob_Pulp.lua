@@ -197,7 +197,6 @@ function event_say(e)
 
     local query = ("SELECT ID,Date_Listed,Char_Name,Item_Name,Item_ID,Price,Sold_To FROM item_auction WHERE Paid_Out = 1 AND Item_Name like '"..tostring(item_name_dbfriend).."'");
     cur2 = assert (con:execute(tostring(query)));
-    --cur = assert (con:execute"SELECT ID,Date_Listed,Char_Name,Item_Name,Item_ID,Price,Sold_To FROM item_auction WHERE Paid_Out = 1 AND Item_Name like '%"..tostring(history_instruct[2]).."%'");
     row2 = cur2:fetch ({}, "a");
     local i = 0;
     local hist_avg_calc = 0;
