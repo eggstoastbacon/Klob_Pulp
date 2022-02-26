@@ -748,7 +748,6 @@ function event_say(e)
         local i = 0;
         while row do
           prettydateListed = split(row.Date_Listed, " ");
-          --if (tonumber(row.Price) >= tonumber(searchprice_instruct[2]) and tonumber(row.Price) <= tonumber(searchprice_instruct[3]))  then
         i = i + 1;
         if(row.Sale_Type == "Direct") then
           e.other:Message(6, string.format("[".. eq.say_link("Contact+"..tostring(row.ID),false,"Contact Seller").."]{%s}{%s}" ..tostring(row.Item_Name).."{%s plat}", row.Char_Name, prettydateListed[1], tostring(row.Price)));
