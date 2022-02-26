@@ -636,7 +636,6 @@ function event_say(e)
                   e.other:Message(8, "+----------+Results+-----------------------------------------------------------------------------------+");    
                   local query = ("SELECT ID,Date_Listed,Char_Name,Item_Name,Item_ID,aug_num,Price,Sale_Type FROM item_auction WHERE Active = 1 AND Expired = 0 AND aug_num > 0");
                   cur = assert (con:execute(tostring(query)));
-                  --cur = assert (con:execute"SELECT * FROM (SELECT ID,Date_Listed,Char_Name,Item_Name,Item_ID,Price FROM item_auction WHERE Active = 1 AND Expired = 0 ORDER BY id DESC LIMIT 300) sub ORDER BY id ASC");
                   row = cur:fetch ({}, "a");
       
                   while row do
