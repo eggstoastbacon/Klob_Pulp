@@ -1073,7 +1073,6 @@ end
 con:close();
 end
   
-
     if (e.message:findi("Cashout")) then
         con = assert (env:connect(db,username,password,server));
         cur = assert (con:execute"SELECT * FROM (SELECT ID,Date_Listed,Char_Name,Item_Name,Item_ID,Price FROM item_auction WHERE Active = 0 AND Paid_Out = 0 ORDER BY id DESC LIMIT 300) sub ORDER BY id ASC");
