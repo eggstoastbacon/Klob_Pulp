@@ -194,8 +194,6 @@ function event_say(e)
     local hist_avg_calc = 0;
     local hist_avg = 0;
     while row2 do
-      --print(string.format("ID: %s, Date: %s", row.ID, row.DATE)
-
         if(row2.Sold_To ~= "Canceled" and row2.Sold_To ~= "Relisted" and row2.Sold_To ~= nil and row2.Price ~= nil) then
         i = i + 1;
         hist_avg_calc = hist_avg_calc + tonumber(row2.Price);
