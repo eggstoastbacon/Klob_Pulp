@@ -47,7 +47,6 @@ function format_int(number)
 end
 
 function event_say(e)
-    --:: Checks if the text is like "item", case-insensitive
     if (e.message:findi("hail")) then
       local total_listings = 0;
       con = assert (env:connect(db,username,password,server));
