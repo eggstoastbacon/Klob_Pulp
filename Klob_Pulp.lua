@@ -16,7 +16,7 @@ local slot_ids4 = {2500, 2550};
 local slot_ids = {slot_ids1, slot_ids2, slot_ids3, slot_ids4};
 
 function split(pString, pPattern)
-   local Table = {}  -- NOTE: use {n = 0} in Lua-5.0
+   local Table = {}
    local fpat = "(.-)" .. pPattern
    local last_end = 1
    local s, e, cap = pString:find(fpat, 1)
