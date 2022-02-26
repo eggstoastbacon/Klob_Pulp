@@ -838,7 +838,6 @@ function event_say(e)
           end
 
           prettydateListed = split(row.Date_Listed, " ");
-          --print(string.format("ID: %s, Date: %s", row.ID, row.DATE))
         if(row.Char_Name == e.other:GetName()) then
           local has_item = 1;
           if(row.Sale_Type == "Direct") then
