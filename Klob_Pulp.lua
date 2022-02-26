@@ -614,7 +614,6 @@ function event_say(e)
                 row = cur:fetch ({}, "a");
                 while row do
                   prettydateListed = split(row.Date_Listed, " ");
-                  --print(string.format("ID: %s, Date: %s", row.ID, row.DATE))
                   item_info = con:execute("SELECT name,id,nodrop,norent,notransfer,maxcharges,slots,attuneable,loregroup,races FROM items WHERE ID = '"..row.Item_ID.."'AND classes & '"..term1.."'");
                   row2 = item_info:fetch ({}, "a");
                   if(row2) then
