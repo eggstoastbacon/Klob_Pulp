@@ -92,7 +92,6 @@ function event_say(e)
         e.other:Message(6, "{Filters}: [".. eq.say_link("class+",false,"show items by class") .."] # [".. eq.say_link("spells+",false,"spells and tomes") .."]");
         e.other:Message(6, "{Search}: [".. eq.say_link("search+",false,"item search") .."] # [".. eq.say_link("history+",false,"sales history") .."]");
         e.other:Message(6, "{Account Management}: [".. eq.say_link("Edit",false,"edit listings") .."] # [".. eq.say_link("Cashout",false,"cashout") .."] # [".. eq.say_link("Sell",false,"sell") .."]");
-    --    e.other:Message(6, "Use [Search+Augmentation] to search for augment items.");
     end
     if (e.message:findi("Sell")) then
     e.other:Message(8, "The command is [Commit+ItemName+PriceinPlatinum] (example: /say commit+paw of opalla+500 or use direct+ for contact only sale.) you will be taxed "..tostring(tax_str).. " percent on all sales. Post up to 20 items per character. Use item links! Items (except spells) expire after 7 days.");
