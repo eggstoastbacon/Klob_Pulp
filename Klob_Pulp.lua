@@ -534,7 +534,6 @@ function event_say(e)
                   row2 = item_info:fetch ({}, "a");
                 end
 
-                --print(string.format("ID: %s, Date: %s", row.ID, row.DATE))
                 if (row2) then
                 prettydateListed = split(row.Date_Listed, " ");
                 e.other:Message(6, string.format("[".. eq.say_link("Order+"..tostring(row.ID),false,"Buy Now") .."]{%s}{%s}" ..eq.item_link(tonumber(row.Item_ID)).."{%s plat}", row.Char_Name, prettydateListed[1], tostring(row.Price)));
