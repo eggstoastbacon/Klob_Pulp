@@ -51,7 +51,7 @@ function event_say(e)
         row = cur:fetch (row, "a");
       end
       total_listings = format_int(total_listings);
-      cur:close() -- already closed because all the result set was consumed
+      cur:close() 
       local total_sold = 0;
       cur = assert (con:execute(tostring("SELECT id from item_auction where active = 0 and paid_out = 1 AND Sold_to NOT LIKE '%Canceled%' AND Sold_to NOT LIKE '%Relisted%' AND Sold_To IS NOT NULL")));
       row = cur:fetch ({}, "a");
@@ -76,7 +76,7 @@ function event_say(e)
       row = cur:fetch (row, "a");
       end
           total_paid = format_int(total_paid);
-      cur:close() -- already closed because all the result set was consumed
+      cur:close() 
       con:close();
         e.other:Message(6, "+----------------------------+");
         e.other:Message(6, "Klob Pulp Auction Ogre");
@@ -719,7 +719,7 @@ function event_say(e)
     -- close everything
     local next = 20
     e.other:Message(6, string.format("[".. eq.say_link("show+"..next,false,"next page").."]"));
-    cur:close() -- already closed because all the result set was consumed
+    cur:close();
     con:close();
     end
 
@@ -814,7 +814,7 @@ function event_say(e)
         row = cur:fetch (row, "a");
         end
             earnings = format_int(earnings);
-        cur:close() -- already closed because all the result set was consumed
+        cur:close();
         e.other:Message(6, "+---------+"..e.other:GetName().."+---------~Lifetime Earnings: "..tostring(earnings).." plat.~----------+");
         cur = assert (con:execute"SELECT * FROM (SELECT ID,Date_Listed,Char_Name,Item_Name,Item_ID,Price,Expired,Sale_Type FROM item_auction WHERE Active = 1) sub ORDER BY id ASC")
         row = cur:fetch ({}, "a");
@@ -845,7 +845,7 @@ function event_say(e)
             e.other:Message(6, "+----------+End of Results+----------+[".. eq.say_link("edit",false,"refresh") .."]+----------+[".. eq.say_link("RepAll",false,"repost all") .."]+----------+[".. eq.say_link("hail",false,"main menu") .."]+----------+");
             return
         end
-        cur:close(); -- already closed because all the result set was consumed
+        cur:close();
         con:close();
     end
 
@@ -1064,7 +1064,7 @@ end
           -- reusing the table of results
           row = cur:fetch (row, "a");
         end
-        cur:close(); -- already closed because all the result set was consumed
+        cur:close();
         if(tonumber(cash) >= 1) then
             local taxed_cash = (tonumber(cash) - tonumber(cash) * tonumber(tax));
             local client = e.other:CastToClient();
