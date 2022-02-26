@@ -99,8 +99,6 @@ function event_say(e)
   end
     
     if (e.message:findi("Check")) then
-        --    item_id = string.match(e.message, "%d+")
-        --    e.self:Emote("1");
             e.other:Message(6, "The Test command will check if an item can be sold [Test+ItemName] example: test+paw of opalla");
             end
 
