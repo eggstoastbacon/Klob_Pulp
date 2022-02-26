@@ -127,9 +127,6 @@ function event_say(e)
                     e.other:Message(6, "This item is sellable.");
                 else
                     e.other:Message(6, "Not sellable using Commit+! Reasons for failure include: No Drop item. No Rent item. Item has charges or is a clicky. Use Direct+ instead to list this item.");
-                 --   if(eq.count_item(tonumber(row.id)) >= 2) then
-                --        e.other:Message(14, "You have more than one of these in your inventory or bank. Currently I cannot sell items for which you have more than 1, but don't worry I will have that fixed soon.")
-                --    end
                 end
                 con:close();
                 return
@@ -153,7 +150,6 @@ function event_say(e)
     item_name_dbfriend = item_name;
     end
     if(string.match(tostring(item_name_dbfriend), "'")) then
-    --e.other:Message(14, "Sorry, I am currently unable to process items that contain the ' symbol.");h
     item_name_dbfriend = item_name_dbfriend:gsub("'", "''");
     end
 
@@ -161,11 +157,7 @@ function event_say(e)
     local row = item_info:fetch ({}, "a");
     local past_count = eq.count_item(tonumber(row.id));
 
-    --e.other:Message(3,tostring(slot_ids1));
-  --  for slot = possessions_begin, possessions_end, 1 do  
-
   for _, slot in ipairs(slot_ids1) do
-    -- e.other:Message(3,tostring(slot)); 
      for a = Slot.AugSocketBegin, Slot.AugSocketEnd, 1 do       
        if (tonumber(row.id) == tonumber(client:GetItemIDAt(slot)) and client:GetAugmentIDAt(slot,a) >= 1) then
          e.other:Message(3,"This item might be augmented, or you have a similar item with an augment installed. If you commit this item your augment may be lost. Please remove the augment from any identical items in your inventory before posting."); 
@@ -175,7 +167,6 @@ function event_say(e)
      end
 
     for _, slot in ipairs(slot_ids2) do
-     -- e.other:Message(3,tostring(slot)); 
       for a = Slot.AugSocketBegin, Slot.AugSocketEnd, 1 do       
         if (tonumber(row.id) == tonumber(client:GetItemIDAt(slot)) and client:GetAugmentIDAt(slot,a) >= 1) then
           e.other:Message(3,"This item might be augmented, or you have a similar item with an augment installed. If you commit this item your augment may be lost. Please remove the augment from any identical items in your inventory before posting."); 
@@ -193,13 +184,7 @@ function event_say(e)
     end
     e.other:Message(3,"Code: " ..row.id.. ", " ..row.nodrop..", " ..row.norent..", " ..row.notransfer..", " ..row.maxcharges..", " ..row.slots..", "..eq.count_item(tonumber(row.id))..", "..row.attuneable.. ", " ..listing_count2..", "..tostring(in_shared));
     if (tonumber(row.nodrop)== 1 and tonumber(row.norent) == 1 and tonumber(row.notransfer) == 0 and (tonumber(row.maxcharges) < 0 or tonumber(row.clickeffect) <= 0) and e.other:HasItem(tonumber(row.id)) and tonumber(row.attuneable) == 0 and tonumber(listing_count2) <= 19 and tonumber(commit_instruct[3]) ~= nil) then
-        -- and eq.count_item(tonumber(row.id)) == 1
     local sellable = 1;
-   -- local posted_id = con:execute("SELECT id FROM item_auction WHERE Item_ID = "..row.id.." AND price = "..tostring(commit_instruct[3]).." AND char_id = "..e.other:CharacterID().." AND Active = 1 AND Paid_Out = 0 AND Expired = 0 LIMIT 1");
-  --  local posted_id2 = posted_id:fetch();
-    
-    --e.other:NukeItem(tonumber(row.id));
-    
     eq.remove_item(tonumber(row.id), 1);
     if(tonumber(past_count) <= eq.count_item(tonumber(row.id))) then
         if(eq.count_item(tonumber(row.id)) == 1) then
@@ -244,12 +229,8 @@ function event_say(e)
 
     e.other:Message(6, "Posted ["..eq.get_item_name(tonumber(row.id)).."] for "..tostring(commit_instruct[3]).. " platinum.");
     eq.get_entity_list():ChannelMessage(e.self, 4, 0, "Somebody posted ["..eq.item_link(tonumber(row.id)).."] for "..tostring(commit_instruct[3]).. "p. (avg. "..tostring(hist_avg)..") [".. eq.say_link("Purchase+"..tostring(listing_id2),false,"Buy Now") .."].");
-    --con:execute([[INSERT INTO ixi_msgboard(Player_Name, Message, Status, Type) VALUES (']]..sender.."','"..msg.."','Live','Public')")
     else
     e.other:Message(6, "Not sellable! Reasons for failure include: No Drop item. Attuneable item. No Rent item. Item has charges or is a clicky. Item is not in your inventory. You have more than one of the item in your inventory. You have not spelled the item name exactly. You have 20 existing posts. Other technical reasons to protect the integrity of the system.");
---    if(eq.count_item(tonumber(row.id)) >= 2) then
---        e.other:Message(14, "You have more than one of these in your inventory or bank. Currently I cannot sell items for which you have more than 1, but don't worry I will have that fixed soon.")
- --   end
     end
     con:close();
     return
@@ -273,13 +254,10 @@ function event_say(e)
       item_name_dbfriend = item_name;
       end
       if(string.match(tostring(item_name_dbfriend), "'")) then
-      --e.other:Message(14, "Sorry, I am currently unable to process items that contain the ' symbol.");
       item_name_dbfriend = item_name_dbfriend:gsub("'", "''");
-      --con:close();
       end
   
       if (tonumber(listing_count2) <= 19 and tonumber(item_price) ~= nil and string.len(item_name) <= 36) then
-          -- and eq.count_item(tonumber(row.id)) == 1
       local sellable = 1;
       e.other:Message(8, "Posting as direct only, ["..item_name.."] for "..tostring(item_price).. " platinum.");
       con:execute([[INSERT INTO item_auction (Account_ID, Char_ID, Char_Name, Item_Name, Price, Sale_Type) VALUES (']]..client:AccountID().."','"..e.other:CharacterID().."','"..e.other:GetName().."','"..item_name_dbfriend.."','"..tostring(item_price).."','Direct')");
@@ -304,7 +282,6 @@ function event_say(e)
         
         while row do
           prettydateListed = split(row.Date_Listed, " ");
-          --print(string.format("ID: %s, Date: %s", row.ID, row.DATE))
         if(row.Char_Name == listbyplayer_instruct[2]) then
         local i = 1;
           e.other:Message(6, string.format("[".. eq.say_link("Order+"..tostring(row.ID),false,"Buy Now") .."]{%s}{%s}" ..eq.item_link(tonumber(row.Item_ID)).."{%s plat}", row.Char_Name, prettydateListed[1], tostring(row.Price)));
@@ -342,13 +319,10 @@ function event_say(e)
 
             local query = ("SELECT * FROM (SELECT ID,Date_Listed,Char_Name,Item_Name,Item_ID,aug_num,Price,Sale_Type FROM item_auction WHERE Active = 1 AND Expired = 0 AND Item_Name like '%"..tostring(item_name_dbfriend).."%' ORDER BY id DESC LIMIT 300) sub ORDER BY id ASC");
             cur = assert (con:execute(tostring(query)));
-            --cur = assert (con:execute"SELECT * FROM (SELECT ID,Date_Listed,Char_Name,Item_Name,Item_ID,Price FROM item_auction WHERE Active = 1 AND Expired = 0 ORDER BY id DESC LIMIT 300) sub ORDER BY id ASC");
             row = cur:fetch ({}, "a");
 
             while row do
               prettydateListed = split(row.Date_Listed, " ");
-              --print(string.format("ID: %s, Date: %s", row.ID, row.DATE))
-              --if string.match(row.Item_Name, search_instruct[2]) then
             local i = 1;
             if(row.Sale_Type == "Direct") then
               e.other:Message(6, string.format("[".. eq.say_link("Contact+"..tostring(row.ID),false,"Contact Seller").."]{%s}{%s}" ..tostring(row.Item_Name).."{%s plat}", row.Char_Name, prettydateListed[1], tostring(row.Price)));
@@ -386,14 +360,10 @@ function event_say(e)
              end
               local query = ("SELECT ID,Date_Listed,Char_Name,Item_Name,Item_ID,Price,Sold_To FROM item_auction WHERE Paid_Out = 1 AND Item_Name like '%"..tostring(item_name_dbfriend).."%'");
               cur = assert (con:execute(tostring(query)));
-              --cur = assert (con:execute"SELECT ID,Date_Listed,Char_Name,Item_Name,Item_ID,Price,Sold_To FROM item_auction WHERE Paid_Out = 1 AND Item_Name like '%"..tostring(history_instruct[2]).."%'");
               row = cur:fetch ({}, "a");
               
               while row do
                 prettydateListed = split(row.Date_Listed, " ");
-                --print(string.format("ID: %s, Date: %s", row.ID, row.DATE))
-                
-                --if string.match(row.Item_Name, history_instruct[2]) then
                   if(row.Sold_To ~= "Canceled" and row.Sold_To ~= "Relisted" and row.Sold_To ~= null) then
                local i = 1;
                 e.other:Message(6, string.format("Sold by %s to %s, On: %s - " ..eq.item_link(tonumber(row.Item_ID)).."{%s plat}", row.Char_Name, row.Sold_To, prettydateListed[1], tostring(row.Price)));
@@ -763,7 +733,6 @@ function event_say(e)
     
     while row do
       prettydateListed = split(row.Date_Listed, " ");
-      --print(string.format("ID: %s, Date: %s", row.ID, row.DATE))
       e.other:Message(6, string.format("[".. eq.say_link("Order+"..tostring(row.ID),false,"Buy Now") .."]{%s}{%s}" ..eq.item_link(tonumber(row.Item_ID)).."{%s plat}", row.Char_Name, prettydateListed[1], tostring(row.Price)));
       -- reusing the table of results
       row = cur:fetch (row, "a");
@@ -785,13 +754,11 @@ function event_say(e)
         local i = 0;
         while row do
           prettydateListed = split(row.Date_Listed, " ");
-          --print(string.format("ID: %s, Date: %s", row.ID, row.DATE))
           --if (tonumber(row.Price) >= tonumber(searchprice_instruct[2]) and tonumber(row.Price) <= tonumber(searchprice_instruct[3]))  then
         i = i + 1;
         if(row.Sale_Type == "Direct") then
           e.other:Message(6, string.format("[".. eq.say_link("Contact+"..tostring(row.ID),false,"Contact Seller").."]{%s}{%s}" ..tostring(row.Item_Name).."{%s plat}", row.Char_Name, prettydateListed[1], tostring(row.Price)));
         else
-       -- if(row.Sale_Type ~= "Direct") then
           e.other:Message(6, string.format("[".. eq.say_link("Order+"..tostring(row.ID),false,"Buy Now") .."]{%s}{%s}" ..eq.item_link(tonumber(row.Item_ID)).."{%s plat}", row.Char_Name, prettydateListed[1], tostring(row.Price)));
         end
           -- reusing the table of results
@@ -1039,12 +1006,10 @@ if (e.message:findi("RepAll")) then
   end
 local item_name_dbfriend = row3.Item_Name;
 if(string.match(tostring(item_name_dbfriend), "'")) then
---e.other:Message(14, "Sorry, I am currently unable to process items that contain the ' symbol.");
 item_name_dbfriend = item_name_dbfriend:gsub("'", "''");
 end
 if (tonumber(row4.attuneable) == 0) then
   con:execute([[INSERT INTO item_auction (Account_ID, Char_ID, Char_Name, Item_Name, Item_ID, Price, Aug_Num) VALUES (']]..client:AccountID().."','"..e.other:CharacterID().."','"..e.other:GetName().."','"..item_name_dbfriend.."','"..row3.Item_ID.."','"..row3.Price.."','"..tostring(Augment).."')");
- -- e.other:Message(6, "Posting ["..row3.Item_Name.."] for "..row3.Price.. " platinum.");
 else    
   e.other:Message(8, "Item is attuned, cannot repost.");
 end
@@ -1094,7 +1059,6 @@ if (e.message:findi("OnSale")) then
   end
 local item_name_dbfriend = row3.Item_Name;
 if(string.match(tostring(item_name_dbfriend), "'")) then
---e.other:Message(14, "Sorry, I am currently unable to process items that contain the ' symbol.");
 item_name_dbfriend = item_name_dbfriend:gsub("'", "''");
 end
 if (tonumber(row4.attuneable) == 0) then
@@ -1117,7 +1081,6 @@ end
         row = cur:fetch ({}, "a");
         local cash = 0;
         while row do
-          --print(string.format("ID: %s, Date: %s", row.ID, row.DATE))
         if(row.Char_Name == e.other:GetName()) then
         cash = (cash + tonumber(row.Price));
         con:execute("UPDATE item_auction SET Paid_Out = 1 WHERE Active = 0 AND Paid_Out = 0 AND ID = '"..row.ID.."'");
@@ -1145,4 +1108,3 @@ end
     return
 end
 
---and tonumber(row2.loregroup) == -1
