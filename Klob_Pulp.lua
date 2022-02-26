@@ -95,8 +95,6 @@ function event_say(e)
     --    e.other:Message(6, "Use [Search+Augmentation] to search for augment items.");
     end
     if (e.message:findi("Sell")) then
---    item_id = string.match(e.message, "%d+")
---    e.self:Emote("1");
     e.other:Message(8, "The command is [Commit+ItemName+PriceinPlatinum] (example: /say commit+paw of opalla+500 or use direct+ for contact only sale.) you will be taxed "..tostring(tax_str).. " percent on all sales. Post up to 20 items per character. Use item links! Items (except spells) expire after 7 days.");
     e.other:Message(8, "+-[".. eq.say_link("hail",false,"main menu") .."]-+");
   end
