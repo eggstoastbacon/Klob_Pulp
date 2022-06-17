@@ -2,7 +2,7 @@ require("mysql")
 driver = require("luasql.mysql");
 env = driver.mysql();
 con = assert (env:connect(db,username,password,server))
-gm_name = "Ixiboru"
+gm_name = "Your Name"
 
 local account_max_items = 30;
 local char_max_items = 30;
