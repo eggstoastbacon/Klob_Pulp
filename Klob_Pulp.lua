@@ -156,7 +156,7 @@ function event_say(e)
     item_name_dbfriend = item_name_dbfriend:gsub("'", "''");
     end
 
-    local item_info = con:execute("SELECT name,id,nodrop,norent,notransfer,maxcharges,slots,attuneable,loregroup,augtype,clickeffect FROM items WHERE name like '"..item_name_dbfriend.."'");
+    local item_info = con:execute("SELECT name,id,nodrop,norent,notransfer,maxcharges,slots,attuneable,loregroup,augtype,clickeffect,bagslots FROM items WHERE name like '"..item_name_dbfriend.."'");
     local row = item_info:fetch ({}, "a");
     local past_count = eq.count_item(tonumber(row.id));
 
@@ -191,7 +191,7 @@ function event_say(e)
     end
     end
     e.other:Message(3,"Code: " ..row.id.. ", " ..row.nodrop..", " ..row.norent..", " ..row.notransfer..", " ..row.maxcharges..", " ..row.slots..", "..eq.count_item(tonumber(row.id))..", "..row.attuneable.. ", " ..listing_count2..", "..tostring(in_shared));
-    if (tonumber(row.nodrop)== 1 and tonumber(row.norent) == 1 and tonumber(row.notransfer) == 0 and (tonumber(row.maxcharges) < 0 or tonumber(row.clickeffect) <= 0) and e.other:HasItem(tonumber(row.id)) and tonumber(row.attuneable) == 0 and tonumber(listing_count2) <= char_max_items and tonumber(commit_instruct[3]) ~= nil) then
+    if (tonumber(row.nodrop)== 1 and tonumber(row.norent) == 1 and tonumber(row.notransfer) == 0 and (tonumber(row.maxcharges) < 0 or tonumber(row.clickeffect) <= 0) and e.other:HasItem(tonumber(row.id)) and tonumber(row.attuneable) == 0 and tonumber(row.bagslots) == 0 and tonumber(listing_count2) <= char_max_items and tonumber(commit_instruct[3]) ~= nil) then
         -- and eq.count_item(tonumber(row.id)) == 1
     local sellable = 1;
    -- local posted_id = con:execute("SELECT id FROM item_auction WHERE Item_ID = "..row.id.." AND price = "..tostring(commit_instruct[3]).." AND char_id = "..e.other:CharacterID().." AND Active = 1 AND Paid_Out = 0 AND Expired = 0 LIMIT 1");
@@ -248,7 +248,7 @@ function event_say(e)
     eq.get_entity_list():ChannelMessage(e.self, 4, 0, "Somebody posted ["..eq.item_link(tonumber(row.id)).."] for "..tostring(commit_instruct[3]).. "p. (avg. "..tostring(hist_avg)..") [".. eq.say_link("Purchase+"..tostring(listing_id2),false,"Buy Now") .."].");
     --con:execute([[INSERT INTO ixi_msgboard(Player_Name, Message, Status, Type) VALUES (']]..sender.."','"..msg.."','Live','Public')")
     else
-    e.other:Message(6, "Not sellable! Reasons for failure include: No Drop item. Attuneable item. No Rent item. Item has charges or is a clicky. Item is not in your inventory. You have more than one of the item in your inventory. You have not spelled the item name exactly. You have 20 existing posts. Other technical reasons to protect the integrity of the system.");
+    e.other:Message(6, "Not sellable! Reasons for failure include: A bag or container. No Drop item. Attuneable item. No Rent item. Item has charges or is a clicky. Item is not in your inventory. You have more than one of the item in your inventory. You have not spelled the item name exactly. You have 20 existing posts. Other technical reasons to protect the integrity of the system. For bags, items with charges or for a specific item use pot+ with the item on your cursor.");
 --    if(eq.count_item(tonumber(row.id)) >= 2) then
 --        e.other:Message(14, "You have more than one of these in your inventory or bank. Currently I cannot sell items for which you have more than 1, but don't worry I will have that fixed soon.")
  --   end
@@ -1204,7 +1204,7 @@ end
     end
 
         e.other:Message(3,"Code: " ..row.id.. ", " ..row.nodrop..", " ..row.norent..", " ..row.notransfer..", " ..row.maxcharges..", " ..row.slots..", "..eq.count_item(tonumber(row.id))..", "..row.attuneable.. ", " ..listing_count2..", "..tostring(in_shared));
-        if tonumber(row6.charges) == tonumber(row.maxcharges) and tonumber(client:GetItemIDAt(Slot.Cursor)) == tonumber(row.id) and (tonumber(row.nodrop)== 1 and tonumber(row.norent) == 1 and tonumber(row.notransfer) == 0 and (tonumber(row.maxcharges) > 0) and e.other:HasItem(tonumber(row.id)) and tonumber(row.attuneable) == 0 and tonumber(listing_count2) <= char_max_items and tonumber(commit_instruct[3]) ~= nil) then
+        if tonumber(row6.charges) == tonumber(row.maxcharges) and tonumber(client:GetItemIDAt(Slot.Cursor)) == tonumber(row.id) and (tonumber(row.nodrop)== 1 and tonumber(row.norent) == 1 and tonumber(row.notransfer) == 0 and (tonumber(row.maxcharges) >= 0) and e.other:HasItem(tonumber(row.id)) and tonumber(row.attuneable) == 0 and tonumber(listing_count2) <= char_max_items and tonumber(commit_instruct[3]) ~= nil) then
             -- and eq.count_item(tonumber(row.id)) == 1
         local sellable = 1;
 
@@ -1274,8 +1274,3 @@ end
     con:close();
     return
 end
-
-
-
-
-
