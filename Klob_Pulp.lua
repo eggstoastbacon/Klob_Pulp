@@ -1184,7 +1184,7 @@ end
         item_name_dbfriend = item_name_dbfriend:gsub("'", "''");
         end
     
-        local item_info = con:execute("SELECT name,id,nodrop,norent,notransfer,maxcharges,slots,attuneable,loregroup,augtype,clickeffect FROM items WHERE name like '"..item_name_dbfriend.."'");
+        local item_info = con:execute("SELECT name,id,nodrop,norent,notransfer,maxcharges,slots,attuneable,loregroup,augtype,clickeffect,bagtype,bagslots FROM items WHERE name like '"..item_name_dbfriend.."'");
         local row = item_info:fetch ({}, "a");
         local past_count = eq.count_item(tonumber(row.id));
         local item_find = con:execute("SELECT charges FROM inventory WHERE itemid like '"..row.id.."' and slotid = 33 and charid = '"..e.other:CharacterID().."'");
@@ -1198,24 +1198,24 @@ end
         end
 
 
-    if tonumber(row6.charges) ~= tonumber(row.maxcharges) then
+    if tonumber(row6.charges) ~= tonumber(row.maxcharges) and tonumber(row.bagtype) == 0 and tonumber(row.bagslots) < 2 then
         e.other:Message(6, "This item does not have the maximum charges you swindler.");
         return
     end
 
         e.other:Message(3,"Code: " ..row.id.. ", " ..row.nodrop..", " ..row.norent..", " ..row.notransfer..", " ..row.maxcharges..", " ..row.slots..", "..eq.count_item(tonumber(row.id))..", "..row.attuneable.. ", " ..listing_count2..", "..tostring(in_shared));
-        if tonumber(row6.charges) == tonumber(row.maxcharges) and tonumber(client:GetItemIDAt(Slot.Cursor)) == tonumber(row.id) and (tonumber(row.nodrop)== 1 and tonumber(row.norent) == 1 and tonumber(row.notransfer) == 0 and (tonumber(row.maxcharges) >= 0) and e.other:HasItem(tonumber(row.id)) and tonumber(row.attuneable) == 0 and tonumber(listing_count2) <= char_max_items and tonumber(commit_instruct[3]) ~= nil) then
+        if (tonumber(row6.charges) == tonumber(row.maxcharges) or (tonumber(row.bagtype) >= 1 and tonumber(row.bagslots) >= 2)) and tonumber(client:GetItemIDAt(Slot.Cursor)) == tonumber(row.id) and (tonumber(row.nodrop)== 1 and tonumber(row.norent) == 1 and tonumber(row.notransfer) == 0 and (tonumber(row.maxcharges) >= 0) and e.other:HasItem(tonumber(row.id)) and tonumber(row.attuneable) == 0 and tonumber(listing_count2) <= char_max_items and tonumber(commit_instruct[3]) ~= nil) then
             -- and eq.count_item(tonumber(row.id)) == 1
         local sellable = 1;
 
         if tonumber(client:GetItemIDAt(Slot.Cursor)) ~= tonumber(row.id) then
             return
         end
-        
-        eq.remove_item(tonumber(row.id), 1);
+        e.other:NukeItem(tonumber(row.id), Slot.Cursor);
+        --eq.remove_item(tonumber(row.id), 1);
         if(tonumber(past_count) <= eq.count_item(tonumber(row.id))) then
             if(eq.count_item(tonumber(row.id)) == 1) then
-                e.other:NukeItem(tonumber(row.id));
+                e.other:NukeItem(tonumber(row.id), Slot.Cursor);
             else
             e.other:Message(6, "An error occurred and I am unable to post your item. This sometimes occurs if there is 2 or more items in the database with the exact same name and I was unable to determine which item you have to sell. I will email the administrator");
             con:close();
@@ -1274,3 +1274,5 @@ end
     con:close();
     return
 end
+
+--and tonumber(row2.loregroup) == -1
